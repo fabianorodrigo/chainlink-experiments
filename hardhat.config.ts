@@ -9,13 +9,16 @@ import {DATA_FEED_ETH_USD_BLOCK_NUMBER} from "./constants";
 
 dotenv.config();
 
-// POLYGON MAINNET API KEY
+// POLYGON NUMBAI API KEY
 const ALCHEMY_API_KEY_URL = process.env.ALCHEMY_API_KEY_URL;
-if (ALCHEMY_API_KEY_URL == null || ALCHEMY_API_KEY_URL.trim() == "") {
-  throw new Error(
-    `Environment variable 'ALCHEMY_API_KEY_URL' to 'https://polygon-mumbai.g.alchemy.com/v2/<KEY>' is required`
-  );
-}
+validateEV(
+  "ALCHEMY_API_KEY_URL",
+  ALCHEMY_API_KEY_URL,
+  "https://polygon-mumbai.g.alchemy.com/v2/<KEY>"
+);
+// ETHERSCAN API KEY
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
+validateEV("ETHERSCAN_API_KEY", ETHERSCAN_API_KEY);
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
@@ -34,8 +37,19 @@ const config: HardhatUserConfig = {
     },
   },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
+    apiKey: ETHERSCAN_API_KEY,
   },
 };
 
 export default config;
+
+function validateEV(name: string, value: string | undefined, example?: string) {
+  if (value == null || value.trim() == "") {
+    let msg = `Environment variable '${name}' `;
+    if (example) {
+      msg += `to '${example} `;
+    }
+    msg += `is required`;
+    throw new Error(msg);
+  }
+}
