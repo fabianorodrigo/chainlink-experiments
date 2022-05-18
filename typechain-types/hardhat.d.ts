@@ -17,6 +17,18 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.AggregatorV3Interface__factory>;
     getContractFactory(
+      name: "VRFCoordinatorV2Interface",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.VRFCoordinatorV2Interface__factory>;
+    getContractFactory(
+      name: "VRFConsumerBaseV2",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.VRFConsumerBaseV2__factory>;
+    getContractFactory(
+      name: "GameOfThrones",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.GameOfThrones__factory>;
+    getContractFactory(
       name: "PriceConsumerV3",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PriceConsumerV3__factory>;
@@ -26,6 +38,21 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.AggregatorV3Interface>;
+    getContractAt(
+      name: "VRFCoordinatorV2Interface",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.VRFCoordinatorV2Interface>;
+    getContractAt(
+      name: "VRFConsumerBaseV2",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.VRFConsumerBaseV2>;
+    getContractAt(
+      name: "GameOfThrones",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.GameOfThrones>;
     getContractAt(
       name: "PriceConsumerV3",
       address: string,

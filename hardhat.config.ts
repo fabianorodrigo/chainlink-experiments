@@ -1,11 +1,9 @@
-import * as dotenv from "dotenv";
-
-import {HardhatUserConfig} from "hardhat/config";
 import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
+import * as dotenv from "dotenv";
 import "hardhat-gas-reporter";
-import {DATA_FEED_ETH_USD_BLOCK_NUMBER} from "./constants";
+import {HardhatUserConfig} from "hardhat/config";
 
 dotenv.config();
 
@@ -24,7 +22,7 @@ validateEV("ETHERSCAN_API_KEY", ETHERSCAN_API_KEY);
  * @type import('hardhat/config').HardhatUserConfig
  */
 const config: HardhatUserConfig = {
-  solidity: "0.8.4",
+  solidity: "0.8.7",
   networks: {
     hardhat: {
       forking: {
