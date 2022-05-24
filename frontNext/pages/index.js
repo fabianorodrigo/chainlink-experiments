@@ -1,14 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
-import React, {useEffect, useRef, useState} from "react";
-import Web3Modal from "web3modal";
-import {
-  abiConsumer,
-  abiLink,
-  CONSUMER_CONTRACT_ADDRESS,
-  KOVAN_DEVREL_NODE,
-  KOVAN_LINK_TOKEN,
-} from "../constants";
+import React from "react";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
@@ -24,16 +16,22 @@ export default function Home() {
           <h1 className={styles.title}>Welcome to Chainlink Experiments!</h1>
           <div className={styles.description}>
             It's a didatic project to learn about the blockchain oracle solution{" "}
-            <a href="https://chain.link">Chainlink</a>
+            <a href="https://chain.link" target="_blank">
+              Chainlink
+            </a>
           </div>
-          <div className={styles.description}>
-            <Link href="./apiConsumer">
-              <a>API Consumer</a>
-            </Link>
-            <Link href="./apiConsumerMultiWords">
-              <a>API Consumer Multi-Word</a>
-            </Link>
-          </div>
+          <ul>
+            <li>
+              <Link href="./apiConsumer">
+                <a>API Consumer</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="./apiConsumerMultiWords">
+                <a>API Consumer Multi-Word</a>
+              </Link>
+            </li>
+          </ul>
         </div>
         <div>
           <img className={styles.image} src="./img/chainlink.png" />

@@ -1,5 +1,6 @@
-import {Contract, providers, utils, ContractFactory} from "ethers";
+import {Contract, providers} from "ethers";
 import Head from "next/head";
+import Link from "next/link";
 import React, {useEffect, useRef, useState} from "react";
 import Web3Modal from "web3modal";
 import {
@@ -11,7 +12,7 @@ import {
 } from "../constants";
 import styles from "../styles/Home.module.css";
 
-export default function Home() {
+export default function APIConsumer() {
   // walletConnected keep track of whether the user's wallet is connected or not
   const [walletConnected, setWalletConnected] = useState(false);
   // loading is set to true when we are waiting for a transaction to get mined
@@ -267,18 +268,19 @@ export default function Home() {
         <div>
           <h1 className={styles.title}>Welcome to Chainlink Experiments!</h1>
           <div className={styles.description}>
-            It's a didatic project to learn about the blockchain oracle solution{" "}
-            <a href="https://chain.link">Chainlink</a>
-          </div>
-          <div className={styles.description}>
             <b>{consumerLinkBalance}</b> is the LINK balance of consumer
             contract.
           </div>
 
           <div className={styles.description}>
-            <b>{volume24h}</b> is the volume of Ethers in the last 24 hours
+            <b>ETH {volume24h}</b> is the volume of Ethers in the last 24 hours
           </div>
           {renderButton()}
+          <div>
+            <Link href="/">
+              <a>Back to home</a>
+            </Link>
+          </div>
         </div>
         <div>
           <img className={styles.image} src="./img/chainlink.png" />
