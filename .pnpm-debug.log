@@ -1,0 +1,14 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1
+  },
+  "1 error pnpm": {
+    "code": "ERR_PNPM_NO_IMPORTER_MANIFEST_FOUND",
+    "err": {
+      "name": "pnpm",
+      "message": "No package.json (or package.yaml, or package.json5) was found in \"/home/fabianorodrigo/Projetos/solidity/chainlink-experiments\".",
+      "code": "ERR_PNPM_NO_IMPORTER_MANIFEST_FOUND",
+      "stack": "pnpm: No package.json (or package.yaml, or package.json5) was found in \"/home/fabianorodrigo/Projetos/solidity/chainlink-experiments\".\n    at readProjectManifest (/home/fabianorodrigo/.local/share/pnpm/global/5/.pnpm/pnpm@7.1.5/node_modules/pnpm/dist/pnpm.cjs:20801:13)\n    at async Object.readProjectManifestOnly (/home/fabianorodrigo/.local/share/pnpm/global/5/.pnpm/pnpm@7.1.5/node_modules/pnpm/dist/pnpm.cjs:20805:28)\n    at async readProjectManifestOnly (/home/fabianorodrigo/.local/share/pnpm/global/5/.pnpm/pnpm@7.1.5/node_modules/pnpm/dist/pnpm.cjs:43819:24)\n    at async Object.handler (/home/fabianorodrigo/.local/share/pnpm/global/5/.pnpm/pnpm@7.1.5/node_modules/pnpm/dist/pnpm.cjs:171930:24)\n    at async /home/fabianorodrigo/.local/share/pnpm/global/5/.pnpm/pnpm@7.1.5/node_modules/pnpm/dist/pnpm.cjs:176499:21\n    at async run (/home/fabianorodrigo/.local/share/pnpm/global/5/.pnpm/pnpm@7.1.5/node_modules/pnpm/dist/pnpm.cjs:176473:34)\n    at async runPnpm (/home/fabianorodrigo/.local/share/pnpm/global/5/.pnpm/pnpm@7.1.5/node_modules/pnpm/dist/pnpm.cjs:176691:5)\n    at async /home/fabianorodrigo/.local/share/pnpm/global/5/.pnpm/pnpm@7.1.5/node_modules/pnpm/dist/pnpm.cjs:176683:7"
+    }
+  }
+}
