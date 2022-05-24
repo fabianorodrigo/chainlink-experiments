@@ -1,8 +1,14 @@
-import {Contract, providers, utils} from "ethers";
+import {Contract, providers, utils, ContractFactory} from "ethers";
 import Head from "next/head";
 import React, {useEffect, useRef, useState} from "react";
 import Web3Modal from "web3modal";
-import {abi, CONSUMER_CONTRACT_ADDRESS, KOVAN_DEVREL_NODE} from "../constants";
+import {
+  abiConsumer,
+  abiLink,
+  CONSUMER_CONTRACT_ADDRESS,
+  KOVAN_DEVREL_NODE,
+  KOVAN_LINK_TOKEN,
+} from "../constants";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
@@ -12,8 +18,10 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   // checks if the currently connected MetaMask wallet is the owner of the contract
   const [isOwner, setIsOwner] = useState(false);
-  // tokenIdsMinted keeps track of the number of tokenIds that have been minted
+  // volume24h keeps track of the volume of Ethers in the state of consumer contract
   const [volume24h, setVolume24h] = useState("0");
+  // consumerLinkBalance keeps track of the consumer contract's balance in LINK
+  const [consumerLinkBalance, setConsumerLinkBalance] = useState("0");
   // Create a reference to the Web3 Modal (used for connecting to Metamask) which persists as long as the page is open
   const web3ModalRef = useRef();
 
@@ -28,7 +36,7 @@ export default function Home() {
       // update methods
       const consumerContract = new Contract(
         CONSUMER_CONTRACT_ADDRESS,
-        abi,
+        abiConsumer,
         signer
       );
       // call the requestVolumeDAta from the consumer contract, the consumer has to have LINK balance in order to request
@@ -40,36 +48,6 @@ export default function Home() {
       window.alert(
         "You successfully trigger the consumer contract to request Ether volume!"
       );
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  /**
-   * publicMint: Mint an NFT after the presale
-   */
-  const publicMint = async () => {
-    try {
-      // We need a Signer here since this is a 'write' transaction.
-      const signer = await getProviderOrSigner(true);
-      // Create a new instance of the Contract with a Signer, which allows
-      // update methods
-      const whitelistContract = new Contract(
-        CONSUMER_CONTRACT_ADDRESS,
-        abi,
-        signer
-      );
-      // call the mint from the contract to mint the Crypto Dev
-      const tx = await whitelistContract.mint({
-        // value signifies the cost of one crypto dev which is "0.01" eth.
-        // We are parsing `0.01` string to ether using the utils library from ethers.js
-        value: utils.parseEther("0.01"),
-      });
-      setLoading(true);
-      // wait for the transaction to get mined
-      await tx.wait();
-      setLoading(false);
-      window.alert("You successfully minted a Crypto Dev!");
     } catch (err) {
       console.error(err);
     }
@@ -90,33 +68,6 @@ export default function Home() {
   };
 
   /**
-   * startPresale: starts the presale for the NFT Collection
-   */
-  const startPresale = async () => {
-    try {
-      // We need a Signer here since this is a 'write' transaction.
-      const signer = await getProviderOrSigner(true);
-      // Create a new instance of the Contract with a Signer, which allows
-      // update methods
-      const whitelistContract = new Contract(
-        CONSUMER_CONTRACT_ADDRESS,
-        abi,
-        signer
-      );
-      // call the startPresale from the contract
-      const tx = await whitelistContract.startPresale();
-      setLoading(true);
-      // wait for the transaction to get mined
-      await tx.wait();
-      setLoading(false);
-      // set the presale started to true
-      await checkIfPresaleStarted();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  /**
    * getOwner: calls the contract to retrieve the owner
    */
   const getOwner = async () => {
@@ -128,7 +79,7 @@ export default function Home() {
       // have read-only access to the Contract
       const consumerContract = new Contract(
         CONSUMER_CONTRACT_ADDRESS,
-        abi,
+        abiConsumer,
         provider
       );
       // call the owner function from the contract
@@ -157,13 +108,33 @@ export default function Home() {
       // have read-only access to the Contract
       const consumerContract = new Contract(
         CONSUMER_CONTRACT_ADDRESS,
-        abi,
+        abiConsumer,
         provider
       );
-      // call the tokenIds from the contract
+      // call the volume from the contract
       const _volume = await consumerContract.volume();
       //_tokenIds is a `Big Number`. We need to convert the Big Number to a string
       setVolume24h((_volume / 10 ** 18).toFixed(2));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  /**
+   * getConsumerLinkBalance: gets the consumer contract's LINK balance
+   */
+  const getConsumerLinkBalance = async () => {
+    try {
+      // Get the provider from web3Modal, which in our case is MetaMask
+      // No need for the Signer here, as we are only reading state from the blockchain
+      const provider = await getProviderOrSigner();
+      // We connect to the Contract using a Provider, so we will only
+      // have read-only access to the Contract
+      const linkContract = new Contract(KOVAN_LINK_TOKEN, abiLink, provider);
+      // call the balance from the contract
+      const _balance = await linkContract.balanceOf(CONSUMER_CONTRACT_ADDRESS);
+      //_tokenIds is a `Big Number`. We need to convert the Big Number to a string
+      setConsumerLinkBalance((_balance / 10 ** 18).toFixed(2));
     } catch (err) {
       console.error(err);
     }
@@ -229,9 +200,10 @@ export default function Home() {
       //   }
       // }, 5 * 1000);
 
-      // set an interval to get the Ether volume every 5 seconds
+      // set an interval to get the Ether volume and the LINK balance of consumer every 5 seconds
       setInterval(async function () {
         await getEtherVolume();
+        await getConsumerLinkBalance();
       }, 5 * 1000);
     }
   }, [walletConnected]);
@@ -254,14 +226,20 @@ export default function Home() {
       return <button className={styles.button}>Loading...</button>;
     }
 
-    // If connected user is the owner, and presale hasnt started yet, allow them to start the presale
-    // if (isOwner && !presaleStarted) {
-    //   return (
-    //     <button className={styles.button} onClick={startPresale}>
-    //       Start Presale!
-    //     </button>
-    //   );
-    // }
+    // If the consumer contract has no LINK, it's not possible trigger the request
+    if (consumerLinkBalance == 0) {
+      return (
+        <>
+          <div className={styles.description}>
+            The consumer contract has no LINK token. It's necessary to send it
+            some in order to trigger an volume update request 🤷‍♂️
+          </div>
+          <div className={styles.description}>
+            The consumer address is: {CONSUMER_CONTRACT_ADDRESS}.
+          </div>
+        </>
+      );
+    }
 
     // Triggers the consumer contract to make a request to Oracle
     return (
@@ -292,6 +270,11 @@ export default function Home() {
             It's a didatic project to learn about the blockchain oracle solution{" "}
             <a href="https://chain.link">Chainlink</a>
           </div>
+          <div className={styles.description}>
+            <b>{consumerLinkBalance}</b> is the LINK balance of consumer
+            contract.
+          </div>
+
           <div className={styles.description}>
             <b>{volume24h}</b> is the volume of Ethers in the last 24 hours
           </div>
