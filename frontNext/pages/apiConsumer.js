@@ -273,7 +273,7 @@ export default function APIConsumer() {
           </div>
 
           <div className={styles.description}>
-            <b>ETH {volume24h}</b> is the volume of Ethers in the last 24 hours
+            <b>USD {volume24h}</b> is the volume of Ethers in the last 24 hours
           </div>
           {renderButton()}
           <div>

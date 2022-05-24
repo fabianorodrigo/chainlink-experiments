@@ -1,11 +1,12 @@
-import {Contract, providers, utils, ContractFactory} from "ethers";
+import {Contract, providers} from "ethers";
 import Head from "next/head";
+import Link from "next/link";
 import React, {useEffect, useRef, useState} from "react";
 import Web3Modal from "web3modal";
 import {
-  abiConsumer,
+  abiConsumerMultiWord,
   abiLink,
-  CONSUMER_CONTRACT_ADDRESS,
+  CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS,
   KOVAN_DEVREL_NODE,
   KOVAN_LINK_TOKEN,
 } from "../constants";
@@ -18,35 +19,39 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   // checks if the currently connected MetaMask wallet is the owner of the contract
   const [isOwner, setIsOwner] = useState(false);
-  // volume24h keeps track of the volume of Ethers in the state of consumer contract
-  const [volume24h, setVolume24h] = useState("0");
+  // ethUSD keeps track of the USD price of Ethers in the state of consumer contract
+  const [ethUSD, setEthUSD] = useState("0");
+  // ethBTC keeps track of the BTC price of Ethers in the state of consumer contract
+  const [ethBTC, setEthBTC] = useState("0");
+  // ethUSD keeps track of the EUROS price of Ethers in the state of consumer contract
+  const [ethEUR, setEthEUR] = useState("0");
   // consumerLinkBalance keeps track of the consumer contract's balance in LINK
   const [consumerLinkBalance, setConsumerLinkBalance] = useState("0");
   // Create a reference to the Web3 Modal (used for connecting to Metamask) which persists as long as the page is open
   const web3ModalRef = useRef();
 
   /**
-   * updateVolume: Triggers consumer contract to make a request for updated volume of Ether to the oracle contract
+   * updatePrice: Triggers consumer contract to make a request for updated price of Ether to the oracle contract
    */
-  const updateVolume = async () => {
+  const updatePrice = async () => {
     try {
       // We need a Signer here since this is a 'write' transaction.
       const signer = await getProviderOrSigner(true);
       // Create a new instance of the Contract with a Signer, which allows
       // update methods
       const consumerContract = new Contract(
-        CONSUMER_CONTRACT_ADDRESS,
-        abiConsumer,
+        CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS,
+        abiConsumerMultiWord,
         signer
       );
-      // call the requestVolumeDAta from the consumer contract, the consumer has to have LINK balance in order to request
-      const tx = await consumerContract.requestVolumeData();
+      // call the requestMultipleParameters from the consumer contract, the consumer has to have LINK balance in order to request
+      const tx = await consumerContract.requestMultipleParameters();
       setLoading(true);
       // wait for the transaction to get mined
       await tx.wait();
       setLoading(false);
       window.alert(
-        "You successfully trigger the consumer contract to request Ether volume!"
+        "You successfully trigger the consumer contract to request Ether prices!"
       );
     } catch (err) {
       console.error(err);
@@ -78,8 +83,8 @@ export default function Home() {
       // We connect to the Contract using a Provider, so we will only
       // have read-only access to the Contract
       const consumerContract = new Contract(
-        CONSUMER_CONTRACT_ADDRESS,
-        abiConsumer,
+        CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS,
+        abiConsumerMultiWord,
         provider
       );
       // call the owner function from the contract
@@ -97,9 +102,9 @@ export default function Home() {
   };
 
   /**
-   * getEtherVolume: gets the volume of Ether in the last 24 hours
+   * getEtherPrices: gets the price of Ether in BTC, USD and EUR
    */
-  const getEtherVolume = async () => {
+  const getEtherPrices = async () => {
     try {
       // Get the provider from web3Modal, which in our case is MetaMask
       // No need for the Signer here, as we are only reading state from the blockchain
@@ -107,14 +112,20 @@ export default function Home() {
       // We connect to the Contract using a Provider, so we will only
       // have read-only access to the Contract
       const consumerContract = new Contract(
-        CONSUMER_CONTRACT_ADDRESS,
-        abiConsumer,
+        CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS,
+        abiConsumerMultiWord,
         provider
       );
-      // call the volume from the contract
-      const _volume = await consumerContract.volume();
-      //_tokenIds is a `Big Number`. We need to convert the Big Number to a string
-      setVolume24h((_volume / 10 ** 18).toFixed(2));
+      const F = 100000;
+      // call the price in BTC from the contract
+      const _ethBTC = await consumerContract.btc();
+      setEthBTC((_ethBTC / F).toFixed(2));
+      // call the price in USD from the contract
+      const _ethUSD = await consumerContract.usd();
+      setEthUSD((_ethUSD / F).toFixed(2));
+      // call the price in EUR from the contract
+      const _ethEUR = await consumerContract.eur();
+      setEthEUR((_ethEUR / F).toFixed(2));
     } catch (err) {
       console.error(err);
     }
@@ -132,7 +143,9 @@ export default function Home() {
       // have read-only access to the Contract
       const linkContract = new Contract(KOVAN_LINK_TOKEN, abiLink, provider);
       // call the balance from the contract
-      const _balance = await linkContract.balanceOf(CONSUMER_CONTRACT_ADDRESS);
+      const _balance = await linkContract.balanceOf(
+        CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS
+      );
       //_tokenIds is a `Big Number`. We need to convert the Big Number to a string
       setConsumerLinkBalance((_balance / 10 ** 18).toFixed(2));
     } catch (err) {
@@ -187,7 +200,7 @@ export default function Home() {
       });
       connectWallet();
 
-      getEtherVolume();
+      getEtherPrices();
 
       // Set an interval which gets called every 5 seconds to check presale has ended
       // const presaleEndedInterval = setInterval(async function () {
@@ -202,7 +215,7 @@ export default function Home() {
 
       // set an interval to get the Ether volume and the LINK balance of consumer every 5 seconds
       setInterval(async function () {
-        await getEtherVolume();
+        await getEtherPrices();
         await getConsumerLinkBalance();
       }, 5 * 1000);
     }
@@ -232,10 +245,10 @@ export default function Home() {
         <>
           <div className={styles.description}>
             The consumer contract has no LINK token. It's necessary to send it
-            some in order to trigger an volume update request 🤷‍♂️
+            some in order to trigger an prices update request 🤷‍♂️
           </div>
           <div className={styles.description}>
-            The consumer address is: {CONSUMER_CONTRACT_ADDRESS}.
+            The consumer address is: {CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS}.
           </div>
         </>
       );
@@ -245,12 +258,12 @@ export default function Home() {
     return (
       <div>
         <div className={styles.description}>
-          Trigger the consumer contract to request the Volume of Ether in the
-          last 24 hours to the Chainlink DevRel Node, published at address{" "}
-          {KOVAN_DEVREL_NODE}, and update the consumer's state 🙃
+          Trigger the consumer contract to request the current price of Ether in
+          BTC, USD, EUR to the Chainlink DevRel Node, published at address{" "}
+          {KOVAN_DEVREL_NODE}, and update the consumer's state 🤑
         </div>
-        <button className={styles.button} onClick={updateVolume}>
-          Update Volume ✏️
+        <button className={styles.button} onClick={updatePrice}>
+          Update Price 💸
         </button>
       </div>
     );
@@ -270,11 +283,24 @@ export default function Home() {
             <b>{consumerLinkBalance}</b> is the LINK balance of consumer
             contract.
           </div>
-
-          <div className={styles.description}>
-            <b>{volume24h}</b> is the volume of Ethers in the last 24 hours
+          <div className={styles.subTitle}>ETH Prices</div>
+          <div className={styles.prices}>
+            <div>
+              <b>BTC:</b> {ethBTC}
+            </div>
+            <div>
+              <b>USD:</b> {ethUSD}
+            </div>
+            <div>
+              <b>EUR:</b> {ethEUR}
+            </div>
           </div>
           {renderButton()}
+          <div>
+            <Link href="/">
+              <a>Back to home</a>
+            </Link>
+          </div>
         </div>
         <div>
           <img className={styles.image} src="./img/chainlink.png" />

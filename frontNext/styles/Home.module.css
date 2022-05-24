@@ -28,6 +28,26 @@
   white-space: nowrap;
 }
 
+.subTitle {
+  font-size: 1.6rem;
+  margin: 2rem 0;
+  font-weight: bold;
+}
+
+
+.prices {
+  line-height: 1;
+  margin: 2rem 0;
+  font-size: 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.prices div {
+  margin: 0.3rem 0;
+}
+
+
 .description {
   line-height: 1;
   margin: 2rem 0;

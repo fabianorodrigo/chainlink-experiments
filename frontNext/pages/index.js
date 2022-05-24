@@ -27,7 +27,7 @@ export default function Home() {
               </Link>
             </li>
             <li>
-              <Link href="./apiConsumerMultiWords">
+              <Link href="./apiConsumerMultiWord">
                 <a>API Consumer Multi-Word</a>
               </Link>
             </li>
