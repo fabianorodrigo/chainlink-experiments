@@ -28,10 +28,10 @@ export default function Home() {
           </div>
           <div className={styles.description}>
             <Link href="./apiConsumer">
-              <a {...props}>API Consumer</a>
+              <a>API Consumer</a>
             </Link>
             <Link href="./apiConsumerMultiWords">
-              <a {...props}>API Consumer Multi-Word</a>
+              <a>API Consumer Multi-Word</a>
             </Link>
           </div>
         </div>
