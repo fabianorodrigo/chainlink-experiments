@@ -24,7 +24,8 @@
 .title {
   font-size: 2rem;
   margin: 2rem 0;
-  color: #375bd2
+  color: #375bd2;
+  white-space: nowrap;
 }
 
 .description {
@@ -44,7 +45,6 @@
   cursor: pointer;
   margin-bottom: 2%;
 }
-
 
 @media (max-width: 1000px) {
   .main {
