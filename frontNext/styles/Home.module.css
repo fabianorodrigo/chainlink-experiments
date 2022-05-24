@@ -24,6 +24,7 @@
 .title {
   font-size: 2rem;
   margin: 2rem 0;
+  color: #375bd2
 }
 
 .description {
@@ -34,7 +35,7 @@
 
 .button {
   border-radius: 4px;
-  background-color: blue;
+  background-color: #375bd2;
   border: none;
   color: #ffffff;
   font-size: 15px;

@@ -1,3 +1,6 @@
+export const CONSUMER_CONTRACT_ADDRESS =
+  "0x939859B2C2915a0E28D41F6E922C950aAdF12155";
+export const KOVAN_DEVREL_NODE = "0x74EcC8Bdeb76F2C6760eD2dc8A46ca5e581fA656";
 export const abi = [
   {
     inputs: [],
@@ -185,5 +188,3 @@ export const abi = [
     type: "function",
   },
 ];
-export const CONSUMER_CONTRACT_ADDRESS =
-  "0x939859B2C2915a0E28D41F6E922C950aAdF12155";

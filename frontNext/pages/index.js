@@ -2,7 +2,7 @@ import {Contract, providers, utils} from "ethers";
 import Head from "next/head";
 import React, {useEffect, useRef, useState} from "react";
 import Web3Modal from "web3modal";
-import {abi, CONSUMER_CONTRACT_ADDRESS} from "../constants";
+import {abi, CONSUMER_CONTRACT_ADDRESS, KOVAN_DEVREL_NODE} from "../constants";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
@@ -163,7 +163,7 @@ export default function Home() {
       // call the tokenIds from the contract
       const _volume = await consumerContract.volume();
       //_tokenIds is a `Big Number`. We need to convert the Big Number to a string
-      setVolume24h(_volume.toString());
+      setVolume24h((_volume / 10 ** 18).toFixed(2));
     } catch (err) {
       console.error(err);
     }
@@ -268,10 +268,11 @@ export default function Home() {
       <div>
         <div className={styles.description}>
           Trigger the consumer contract to request the Volume of Ether in the
-          last 24 hours and update its state 🥳
+          last 24 hours to the Chainlink DevRel Node, published at address{" "}
+          {KOVAN_DEVREL_NODE}, and update the consumer's state 🙃
         </div>
         <button className={styles.button} onClick={updateVolume}>
-          Update Ether Volume 🚀
+          Update Volume ✏️
         </button>
       </div>
     );
@@ -292,7 +293,7 @@ export default function Home() {
             <a href="https://chain.link">Chainlink</a>
           </div>
           <div className={styles.description}>
-            {volume24h} is the volume of Ethers in the last 24 hours
+            <b>{volume24h}</b> is the volume of Ethers in the last 24 hours
           </div>
           {renderButton()}
         </div>
@@ -301,9 +302,7 @@ export default function Home() {
         </div>
       </div>
 
-      <footer className={styles.footer}>
-        Made with &#10084; by Fabiano Nascimento
-      </footer>
+      <footer className={styles.footer}>Made by Fabiano Nascimento</footer>
     </div>
   );
 }
