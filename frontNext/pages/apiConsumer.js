@@ -276,6 +276,7 @@ export default function APIConsumer() {
             <b>Summary:</b> The{" "}
             <a
               target="_blank"
+              rel="noreferrer"
               href={`https://kovan.etherscan.io/address/${CONSUMER_CONTRACT_ADDRESS}`}
             >
               consumer contract
@@ -283,6 +284,7 @@ export default function APIConsumer() {
             makes a request to the{" "}
             <a
               target="_blank"
+              rel="noreferrer"
               href={`https://kovan.etherscan.io/address/${KOVAN_DEVREL_NODE}`}
             >
               oracle contract
@@ -290,6 +292,7 @@ export default function APIConsumer() {
             which in turn calls the{" "}
             <a
               target="_blank"
+              rel="noreferrer"
               href="https://min-api.cryptocompare.com/data/pricemultifull?fsyms=ETH&tsyms=USD"
             >
               CriptoCompare's API

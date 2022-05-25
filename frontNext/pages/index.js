@@ -16,7 +16,7 @@ export default function Home() {
           <h1 className={styles.title}>Welcome to Chainlink Experiments!</h1>
           <div className={styles.description}>
             It's a didatic project to learn about the blockchain oracle solution{" "}
-            <a href="https://chain.link" target="_blank">
+            <a href="https://chain.link" target="_blank" rel="noreferrer">
               Chainlink
             </a>
           </div>

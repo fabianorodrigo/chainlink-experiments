@@ -288,6 +288,7 @@ export default function Home() {
             <b>Summary:</b> The{" "}
             <a
               target="_blank"
+              rel="noreferrer"
               href={`https://kovan.etherscan.io/address/${CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS}`}
             >
               consumer contract
@@ -295,12 +296,17 @@ export default function Home() {
             makes a request to the{" "}
             <a
               target="_blank"
+              rel="noreferrer"
               href={`https://kovan.etherscan.io/address/${KOVAN_DEVREL_NODE}`}
             >
               oracle contract
             </a>{" "}
             which in turn calls the{" "}
-            <a target="_blank" href="https://min-api.cryptocompare.com/">
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href="https://min-api.cryptocompare.com/"
+            >
               CriptoCompare's API
             </a>{" "}
             to retrieve the Ether's price in BTC, USD and EUR.
