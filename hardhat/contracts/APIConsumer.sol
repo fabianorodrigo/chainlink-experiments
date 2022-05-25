@@ -10,8 +10,11 @@ import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
  */
 
 /**
- * THIS IS AN EXAMPLE CONTRACT WHICH USES HARDCODED VALUES FOR CLARITY.
- * PLEASE DO NOT USE THIS CODE IN PRODUCTION.
+ * @notice The Cryptocompare GET /data/pricemultifull API returns the current trading info (price, vol, open, high, low) 
+ * of any list of cryptocurrencies in any other currency that you need. This consumer calls the API above and retrieve 
+ * only the 24h ETH trading volume from the response.
+ *
+ * @dev THIS IS AN EXAMPLE CONTRACT WHICH USES HARDCODED VALUES FOR CLARITY.PLEASE DO NOT USE THIS CODE IN PRODUCTION.
  */
 contract APIConsumer is ChainlinkClient, ConfirmedOwner {
   using Chainlink for Chainlink.Request;
