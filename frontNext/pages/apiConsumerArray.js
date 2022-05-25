@@ -267,6 +267,7 @@ export default function Home() {
             <b>Summary:</b> The{" "}
             <a
               target="_blank"
+              rel="noopener"
               href={`https://kovan.etherscan.io/address/${CONSUMER_ARRAY_CONTRACT_ADDRESS}`}
             >
               consumer contract
@@ -274,6 +275,7 @@ export default function Home() {
             makes a request to the{" "}
             <a
               target="_blank"
+              rel="noopener"
               href={`https://kovan.etherscan.io/address/${KOVAN_DEVREL_NODE}`}
             >
               oracle contract
@@ -281,6 +283,7 @@ export default function Home() {
             which in turn calls the{" "}
             <a
               target="_blank"
+              rel="noopener"
               href="https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false"
             >
               Coingecko's API
