@@ -4,50 +4,50 @@ import Link from "next/link";
 import React, {useEffect, useRef, useState} from "react";
 import Web3Modal from "web3modal";
 import {
-  abiConsumer,
+  abiConsumerArray,
   abiLink,
-  CONSUMER_CONTRACT_ADDRESS,
+  CONSUMER_ARRAY_CONTRACT_ADDRESS,
   KOVAN_DEVREL_NODE,
   KOVAN_LINK_TOKEN,
 } from "../constants";
 import styles from "../styles/Home.module.css";
 
-export default function APIConsumer() {
+export default function Home() {
   // walletConnected keep track of whether the user's wallet is connected or not
   const [walletConnected, setWalletConnected] = useState(false);
   // loading is set to true when we are waiting for a transaction to get mined
   const [loading, setLoading] = useState(false);
   // checks if the currently connected MetaMask wallet is the owner of the contract
   const [isOwner, setIsOwner] = useState(false);
-  // volume24h keeps track of the volume of Ethers in the state of consumer contract
-  const [volume24h, setVolume24h] = useState("0");
+  // idFirstElement keeps track of the first element's ID in the array
+  const [idFirstElement, setIdFirstElement] = useState("");
   // consumerLinkBalance keeps track of the consumer contract's balance in LINK
   const [consumerLinkBalance, setConsumerLinkBalance] = useState("0");
   // Create a reference to the Web3 Modal (used for connecting to Metamask) which persists as long as the page is open
   const web3ModalRef = useRef();
 
   /**
-   * updateVolume: Triggers consumer contract to make a request for updated volume of Ether to the oracle contract
+   * updateFirstId: Triggers consumer contract to make a request for updated first ID to the oracle contract
    */
-  const updateVolume = async () => {
+  const updateFirstId = async () => {
     try {
       // We need a Signer here since this is a 'write' transaction.
       const signer = await getProviderOrSigner(true);
       // Create a new instance of the Contract with a Signer, which allows
       // update methods
       const consumerContract = new Contract(
-        CONSUMER_CONTRACT_ADDRESS,
-        abiConsumer,
+        CONSUMER_ARRAY_CONTRACT_ADDRESS,
+        abiConsumerArray,
         signer
       );
-      // call the requestVolumeDAta from the consumer contract, the consumer has to have LINK balance in order to request
-      const tx = await consumerContract.requestVolumeData();
+      // call the requestFirstId from the consumer contract, the consumer has to have LINK balance in order to request
+      const tx = await consumerContract.requestFirstId();
       setLoading(true);
       // wait for the transaction to get mined
       await tx.wait();
       setLoading(false);
       window.alert(
-        "You successfully trigger the consumer contract to request Ether volume!"
+        "You successfully trigger the consumer contract to request first element ID!"
       );
     } catch (err) {
       console.error(err);
@@ -79,8 +79,8 @@ export default function APIConsumer() {
       // We connect to the Contract using a Provider, so we will only
       // have read-only access to the Contract
       const consumerContract = new Contract(
-        CONSUMER_CONTRACT_ADDRESS,
-        abiConsumer,
+        CONSUMER_ARRAY_CONTRACT_ADDRESS,
+        abiConsumerArray,
         provider
       );
       // call the owner function from the contract
@@ -98,9 +98,9 @@ export default function APIConsumer() {
   };
 
   /**
-   * getEtherVolume: gets the volume of Ether in the last 24 hours
+   * @notice getFirstElementID: gets the first element's ID
    */
-  const getEtherVolume = async () => {
+  const getFirstElementID = async () => {
     try {
       // Get the provider from web3Modal, which in our case is MetaMask
       // No need for the Signer here, as we are only reading state from the blockchain
@@ -108,14 +108,14 @@ export default function APIConsumer() {
       // We connect to the Contract using a Provider, so we will only
       // have read-only access to the Contract
       const consumerContract = new Contract(
-        CONSUMER_CONTRACT_ADDRESS,
-        abiConsumer,
+        CONSUMER_ARRAY_CONTRACT_ADDRESS,
+        abiConsumerArray,
         provider
       );
-      // call the volume from the contract
-      const _volume = await consumerContract.volume();
-      //_tokenIds is a `Big Number`. We need to convert the Big Number to a string
-      setVolume24h((_volume / 10 ** 18).toFixed(2));
+      const F = 100000;
+      // call the ID from the contract
+      const _id = await consumerContract.id();
+      setIdFirstElement(_id);
     } catch (err) {
       console.error(err);
     }
@@ -133,7 +133,9 @@ export default function APIConsumer() {
       // have read-only access to the Contract
       const linkContract = new Contract(KOVAN_LINK_TOKEN, abiLink, provider);
       // call the balance from the contract
-      const _balance = await linkContract.balanceOf(CONSUMER_CONTRACT_ADDRESS);
+      const _balance = await linkContract.balanceOf(
+        CONSUMER_ARRAY_CONTRACT_ADDRESS
+      );
       //_tokenIds is a `Big Number`. We need to convert the Big Number to a string
       setConsumerLinkBalance((_balance / 10 ** 18).toFixed(2));
     } catch (err) {
@@ -189,22 +191,11 @@ export default function APIConsumer() {
       connectWallet();
 
       getConsumerLinkBalance();
-      getEtherVolume();
-
-      // Set an interval which gets called every 5 seconds to check presale has ended
-      // const presaleEndedInterval = setInterval(async function () {
-      //   const _presaleStarted = await checkIfPresaleStarted();
-      //   if (_presaleStarted) {
-      //     const _presaleEnded = await checkIfPresaleEnded();
-      //     if (_presaleEnded) {
-      //       clearInterval(presaleEndedInterval);
-      //     }
-      //   }
-      // }, 5 * 1000);
+      getFirstElementID();
 
       // set an interval to get the Ether volume and the LINK balance of consumer every 5 seconds
       setInterval(async function () {
-        await getEtherVolume();
+        await getFirstElementID();
         await getConsumerLinkBalance();
       }, 5 * 1000);
     }
@@ -240,8 +231,8 @@ export default function APIConsumer() {
             You can feed it with some LINK at{" "}
             <Link href="https://faucets.chain.link/">
               <a>Chainlink's faucet</a>
-            </Link>
-            . The consumer address is: {CONSUMER_CONTRACT_ADDRESS}.
+            </Link>{" "}
+            . The consumer address is: {CONSUMER_ARRAY_CONTRACT_ADDRESS}.
           </div>
         </>
       );
@@ -251,12 +242,12 @@ export default function APIConsumer() {
     return (
       <div>
         <div className={styles.description}>
-          Trigger the consumer contract to request the Volume of Ether in the
-          last 24 hours to the Chainlink DevRel Node, published at address{" "}
-          {KOVAN_DEVREL_NODE}, and update the consumer's state 🙃
+          Trigger the consumer contract to request the ID of the first element
+          returned by the API to the Chainlink DevRel Node, published at address{" "}
+          {KOVAN_DEVREL_NODE}, and update the consumer's state #️
         </div>
-        <button className={styles.button} onClick={updateVolume}>
-          Update Volume ✏️
+        <button className={styles.button} onClick={updateFirstId}>
+          Update ID ☝️
         </button>
       </div>
     );
@@ -276,9 +267,8 @@ export default function APIConsumer() {
             <b>{consumerLinkBalance}</b> is the LINK balance of consumer
             contract.
           </div>
-
           <div className={styles.description}>
-            <b>USD {volume24h}</b> is the volume of Ethers in the last 24 hours
+            <b>First ID:</b> {idFirstElement}
           </div>
           {renderButton()}
           <div>

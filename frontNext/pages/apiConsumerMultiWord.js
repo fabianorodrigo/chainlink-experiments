@@ -200,6 +200,7 @@ export default function Home() {
       });
       connectWallet();
 
+      getConsumerLinkBalance();
       getEtherPrices();
 
       // Set an interval which gets called every 5 seconds to check presale has ended
@@ -248,7 +249,11 @@ export default function Home() {
             some in order to trigger an prices update request 🤷‍♂️
           </div>
           <div className={styles.description}>
-            The consumer address is: {CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS}.
+            You can feed it with some LINK at{" "}
+            <Link href="https://faucets.chain.link/">
+              <a>Chainlink's faucet</a>
+            </Link>{" "}
+            . The consumer address is: {CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS}.
           </div>
         </>
       );

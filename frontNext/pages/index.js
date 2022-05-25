@@ -31,6 +31,11 @@ export default function Home() {
                 <a>API Consumer Multi-Word</a>
               </Link>
             </li>
+            <li>
+              <Link href="./apiConsumerArray">
+                <a>API Consumer Array</a>
+              </Link>
+            </li>
           </ul>
         </div>
         <div>

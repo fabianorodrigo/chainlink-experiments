@@ -2,6 +2,8 @@ export const CONSUMER_CONTRACT_ADDRESS =
   "0x939859B2C2915a0E28D41F6E922C950aAdF12155";
 export const CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS =
   "0x0a1df15EE91AD2D1B5C6C2C238820A4EdF6d507c";
+export const CONSUMER_ARRAY_CONTRACT_ADDRESS =
+  "0xA69fF680173D7317A2BB482B2d00CA99323e01d5";
 
 export const KOVAN_DEVREL_NODE = "0x74EcC8Bdeb76F2C6760eD2dc8A46ca5e581fA656";
 export const KOVAN_LINK_TOKEN = "0xa36085F69e2889c224210F603D836748e7dC0088";
@@ -413,6 +415,194 @@ export const abiConsumerMultiWord = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "withdrawLink",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+
+export const abiConsumerArray = [
+  {
+    inputs: [],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "id",
+        type: "bytes32",
+      },
+    ],
+    name: "ChainlinkCancelled",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "id",
+        type: "bytes32",
+      },
+    ],
+    name: "ChainlinkFulfilled",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "id",
+        type: "bytes32",
+      },
+    ],
+    name: "ChainlinkRequested",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferRequested",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "requestId",
+        type: "bytes32",
+      },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "id",
+        type: "string",
+      },
+    ],
+    name: "RequestFirstId",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "acceptOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_requestId",
+        type: "bytes32",
+      },
+      {
+        internalType: "string",
+        name: "_id",
+        type: "string",
+      },
+    ],
+    name: "fulfill",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "id",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "requestFirstId",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "requestId",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
