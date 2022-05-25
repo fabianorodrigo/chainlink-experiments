@@ -36,6 +36,11 @@ export default function Home() {
                 <a>API Consumer Array</a>
               </Link>
             </li>
+            <li>
+              <Link href="./apiConsumerLargeResponse">
+                <a>API Consumer Large Response (IPFS)</a>
+              </Link>
+            </li>
           </ul>
         </div>
         <div>

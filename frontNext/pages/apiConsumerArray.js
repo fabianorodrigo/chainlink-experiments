@@ -12,7 +12,7 @@ import {
 } from "../constants";
 import styles from "../styles/Home.module.css";
 
-export default function Home() {
+export default function APIConsumerArray() {
   // walletConnected keep track of whether the user's wallet is connected or not
   const [walletConnected, setWalletConnected] = useState(false);
   // loading is set to true when we are waiting for a transaction to get mined

@@ -4,54 +4,50 @@ import Link from "next/link";
 import React, {useEffect, useRef, useState} from "react";
 import Web3Modal from "web3modal";
 import {
-  abiConsumerMultiWord,
+  abiConsumerLargeResponse,
   abiLink,
-  CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS,
+  CONSUMER_LARGE_RESPONSE_CONTRACT_ADDRESS,
   KOVAN_DEVREL_NODE,
   KOVAN_LINK_TOKEN,
 } from "../constants";
 import styles from "../styles/Home.module.css";
 
-export default function APIConsumerMultiWord() {
+export default function APIConsumerLargeResponse() {
   // walletConnected keep track of whether the user's wallet is connected or not
   const [walletConnected, setWalletConnected] = useState(false);
   // loading is set to true when we are waiting for a transaction to get mined
   const [loading, setLoading] = useState(false);
   // checks if the currently connected MetaMask wallet is the owner of the contract
   const [isOwner, setIsOwner] = useState(false);
-  // ethUSD keeps track of the USD price of Ethers in the state of consumer contract
-  const [ethUSD, setEthUSD] = useState("0");
-  // ethBTC keeps track of the BTC price of Ethers in the state of consumer contract
-  const [ethBTC, setEthBTC] = useState("0");
-  // ethUSD keeps track of the EUROS price of Ethers in the state of consumer contract
-  const [ethEUR, setEthEUR] = useState("0");
+  // idFirstElement keeps track of the first element's ID in the array
+  const [imageUrl, setImageUrl] = useState("");
   // consumerLinkBalance keeps track of the consumer contract's balance in LINK
   const [consumerLinkBalance, setConsumerLinkBalance] = useState("0");
   // Create a reference to the Web3 Modal (used for connecting to Metamask) which persists as long as the page is open
   const web3ModalRef = useRef();
 
   /**
-   * updatePrice: Triggers consumer contract to make a request for updated price of Ether to the oracle contract
+   * updateImageUrl: Triggers consumer contract to make a request for image url to the oracle contract
    */
-  const updatePrice = async () => {
+  const updateImageUrl = async () => {
     try {
       // We need a Signer here since this is a 'write' transaction.
       const signer = await getProviderOrSigner(true);
       // Create a new instance of the Contract with a Signer, which allows
       // update methods
       const consumerContract = new Contract(
-        CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS,
-        abiConsumerMultiWord,
+        CONSUMER_LARGE_RESPONSE_CONTRACT_ADDRESS,
+        abiConsumerLargeResponse,
         signer
       );
-      // call the requestMultipleParameters from the consumer contract, the consumer has to have LINK balance in order to request
-      const tx = await consumerContract.requestMultipleParameters();
+      // call the requestBytes from the consumer contract, the consumer has to have LINK balance in order to request
+      const tx = await consumerContract.requestBytes();
       setLoading(true);
       // wait for the transaction to get mined
       await tx.wait();
       setLoading(false);
       window.alert(
-        "You successfully trigger the consumer contract to request Ether prices!"
+        "You successfully trigger the consumer contract to request first element ID!"
       );
     } catch (err) {
       console.error(err);
@@ -83,8 +79,8 @@ export default function APIConsumerMultiWord() {
       // We connect to the Contract using a Provider, so we will only
       // have read-only access to the Contract
       const consumerContract = new Contract(
-        CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS,
-        abiConsumerMultiWord,
+        CONSUMER_LARGE_RESPONSE_CONTRACT_ADDRESS,
+        abiConsumerLargeResponse,
         provider
       );
       // call the owner function from the contract
@@ -102,9 +98,9 @@ export default function APIConsumerMultiWord() {
   };
 
   /**
-   * getEtherPrices: gets the price of Ether in BTC, USD and EUR
+   * @notice getImageUrl: gets the imageUrl
    */
-  const getEtherPrices = async () => {
+  const getImageUrl = async () => {
     try {
       // Get the provider from web3Modal, which in our case is MetaMask
       // No need for the Signer here, as we are only reading state from the blockchain
@@ -112,20 +108,13 @@ export default function APIConsumerMultiWord() {
       // We connect to the Contract using a Provider, so we will only
       // have read-only access to the Contract
       const consumerContract = new Contract(
-        CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS,
-        abiConsumerMultiWord,
+        CONSUMER_LARGE_RESPONSE_CONTRACT_ADDRESS,
+        abiConsumerLargeResponse,
         provider
       );
-      const F = 100000;
-      // call the price in BTC from the contract
-      const _ethBTC = await consumerContract.btc();
-      setEthBTC((_ethBTC / F).toFixed(2));
-      // call the price in USD from the contract
-      const _ethUSD = await consumerContract.usd();
-      setEthUSD((_ethUSD / F).toFixed(2));
-      // call the price in EUR from the contract
-      const _ethEUR = await consumerContract.eur();
-      setEthEUR((_ethEUR / F).toFixed(2));
+      // call the 'image_url' from the contract
+      const _url = await consumerContract.image_url();
+      setImageUrl(_url);
     } catch (err) {
       console.error(err);
     }
@@ -144,7 +133,7 @@ export default function APIConsumerMultiWord() {
       const linkContract = new Contract(KOVAN_LINK_TOKEN, abiLink, provider);
       // call the balance from the contract
       const _balance = await linkContract.balanceOf(
-        CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS
+        CONSUMER_LARGE_RESPONSE_CONTRACT_ADDRESS
       );
       //_tokenIds is a `Big Number`. We need to convert the Big Number to a string
       setConsumerLinkBalance((_balance / 10 ** 18).toFixed(2));
@@ -201,22 +190,11 @@ export default function APIConsumerMultiWord() {
       connectWallet();
 
       getConsumerLinkBalance();
-      getEtherPrices();
-
-      // Set an interval which gets called every 5 seconds to check presale has ended
-      // const presaleEndedInterval = setInterval(async function () {
-      //   const _presaleStarted = await checkIfPresaleStarted();
-      //   if (_presaleStarted) {
-      //     const _presaleEnded = await checkIfPresaleEnded();
-      //     if (_presaleEnded) {
-      //       clearInterval(presaleEndedInterval);
-      //     }
-      //   }
-      // }, 5 * 1000);
+      getImageUrl();
 
       // set an interval to get the Ether volume and the LINK balance of consumer every 5 seconds
       setInterval(async function () {
-        await getEtherPrices();
+        await getImageUrl();
         await getConsumerLinkBalance();
       }, 5 * 1000);
     }
@@ -253,7 +231,8 @@ export default function APIConsumerMultiWord() {
             <Link href="https://faucets.chain.link/">
               <a>Chainlink's faucet</a>
             </Link>{" "}
-            . The consumer address is: {CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS}.
+            . The consumer address is:{" "}
+            {CONSUMER_LARGE_RESPONSE_CONTRACT_ADDRESS}.
           </div>
         </>
       );
@@ -263,12 +242,12 @@ export default function APIConsumerMultiWord() {
     return (
       <div>
         <div className={styles.description}>
-          Trigger the consumer contract to request the current price of Ether in
-          BTC, USD, EUR to the Chainlink DevRel Node, published at address{" "}
-          {KOVAN_DEVREL_NODE}, and update the consumer's state 🤑
+          Trigger the consumer contract to request the Image URL returned by the
+          IPFS to the Chainlink DevRel Node, published at address{" "}
+          {KOVAN_DEVREL_NODE}, and update the consumer's state #️
         </div>
-        <button className={styles.button} onClick={updatePrice}>
-          Update Price 💸
+        <button className={styles.button} onClick={updateImageUrl}>
+          Update Image URL 🖼️
         </button>
       </div>
     );
@@ -289,7 +268,7 @@ export default function APIConsumerMultiWord() {
             <a
               target="_blank"
               rel="noreferrer"
-              href={`https://kovan.etherscan.io/address/${CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS}`}
+              href={`https://kovan.etherscan.io/address/${CONSUMER_LARGE_RESPONSE_CONTRACT_ADDRESS}`}
             >
               consumer contract
             </a>{" "}
@@ -301,31 +280,23 @@ export default function APIConsumerMultiWord() {
             >
               oracle contract
             </a>{" "}
-            which in turn calls the{" "}
+            which in turn make a GET to an{" "}
             <a
               target="_blank"
               rel="noreferrer"
-              href="https://min-api.cryptocompare.com/"
+              href="https://ipfs.io/ipfs/QmZgsvrA1o1C8BGCrx6mHTqR1Ui1XqbCrtbMVrRLHtuPVD?filename=big-api-response.json"
             >
-              CriptoCompare's API
+              JSON hosted in IPFS
             </a>{" "}
-            to retrieve the Ether's price in BTC, USD and EUR.
+            to retrieve the image URL attribute inside this JSON file.
           </div>
           <div className={styles.description}>
             <b>{consumerLinkBalance}</b> is the LINK balance of consumer
             contract.
           </div>
-          <div className={styles.subTitle}>ETH Prices</div>
-          <div className={styles.prices}>
-            <div>
-              <b>BTC:</b> {ethBTC}
-            </div>
-            <div>
-              <b>USD:</b> {ethUSD}
-            </div>
-            <div>
-              <b>EUR:</b> {ethEUR}
-            </div>
+          <div className={styles.description}>
+            <b>URL:</b> {imageUrl}
+            <img src={imageUrl} />
           </div>
           {renderButton()}
           <div>
