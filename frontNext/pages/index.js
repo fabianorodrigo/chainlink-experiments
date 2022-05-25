@@ -41,6 +41,11 @@ export default function Home() {
                 <a>API Consumer Large Response (IPFS)</a>
               </Link>
             </li>
+            <li>
+              <Link href="./apiConsumerPreConfiguredJob">
+                <a>API Consumer Pre-configured Job</a>
+              </Link>
+            </li>
           </ul>
         </div>
         <div>
