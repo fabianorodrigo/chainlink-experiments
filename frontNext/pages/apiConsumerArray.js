@@ -265,21 +265,26 @@ export default function Home() {
           <h1 className={styles.title}>Welcome to Chainlink Experiments!</h1>
           <div className={styles.description}>
             <b>Summary:</b> The{" "}
-            <Link
+            <a
+              target="_blank"
               href={`https://kovan.etherscan.io/address/${CONSUMER_ARRAY_CONTRACT_ADDRESS}`}
             >
-              <a target="_blank">consumer contract</a>
-            </Link>{" "}
+              consumer contract
+            </a>{" "}
             makes a request to the{" "}
-            <Link
+            <a
+              target="_blank"
               href={`https://kovan.etherscan.io/address/${KOVAN_DEVREL_NODE}`}
             >
-              <a target="_blank">oracle contract</a>
-            </Link>{" "}
+              oracle contract
+            </a>{" "}
             which in turn calls the{" "}
-            <Link href="https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false">
-              <a target="_blank">Coingecko's API</a>
-            </Link>{" "}
+            <a
+              target="_blank"
+              href="https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false"
+            >
+              Coingecko's API
+            </a>{" "}
             to retrieve the ID of the first element in the array returned by the
             API.
           </div>

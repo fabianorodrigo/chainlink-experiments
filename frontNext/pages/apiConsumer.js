@@ -274,21 +274,26 @@ export default function APIConsumer() {
           <h1 className={styles.title}>Welcome to Chainlink Experiments!</h1>
           <div className={styles.description}>
             <b>Summary:</b> The{" "}
-            <Link
+            <a
+              target="_blank"
               href={`https://kovan.etherscan.io/address/${CONSUMER_CONTRACT_ADDRESS}`}
             >
-              <a target="_blank">consumer contract</a>
-            </Link>{" "}
+              consumer contract
+            </a>{" "}
             makes a request to the{" "}
-            <Link
+            <a
+              target="_blank"
               href={`https://kovan.etherscan.io/address/${KOVAN_DEVREL_NODE}`}
             >
-              <a target="_blank">oracle contract</a>
-            </Link>{" "}
+              oracle contract
+            </a>{" "}
             which in turn calls the{" "}
-            <Link href="https://min-api.cryptocompare.com/data/pricemultifull?fsyms=ETH&tsyms=USD">
-              <a target="_blank">CriptoCompare's API</a>
-            </Link>{" "}
+            <a
+              target="_blank"
+              href="https://min-api.cryptocompare.com/data/pricemultifull?fsyms=ETH&tsyms=USD"
+            >
+              CriptoCompare's API
+            </a>{" "}
             to retrieve the 24h ETH trading volume.
           </div>
           <div className={styles.description}>

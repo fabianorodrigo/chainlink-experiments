@@ -286,21 +286,23 @@ export default function Home() {
           <h1 className={styles.title}>Welcome to Chainlink Experiments!</h1>
           <div className={styles.description}>
             <b>Summary:</b> The{" "}
-            <Link
+            <a
+              target="_blank"
               href={`https://kovan.etherscan.io/address/${CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS}`}
             >
-              <a target="_blank">consumer contract</a>
-            </Link>{" "}
+              consumer contract
+            </a>{" "}
             makes a request to the{" "}
-            <Link
+            <a
+              target="_blank"
               href={`https://kovan.etherscan.io/address/${KOVAN_DEVREL_NODE}`}
             >
-              <a target="_blank">oracle contract</a>
-            </Link>{" "}
+              oracle contract
+            </a>{" "}
             which in turn calls the{" "}
-            <Link href="https://min-api.cryptocompare.com/">
-              <a target="_blank">CriptoCompare's API</a>
-            </Link>{" "}
+            <a target="_blank" href="https://min-api.cryptocompare.com/">
+              CriptoCompare's API
+            </a>{" "}
             to retrieve the Ether's price in BTC, USD and EUR.
           </div>
           <div className={styles.description}>
