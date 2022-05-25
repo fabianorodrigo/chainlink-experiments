@@ -112,7 +112,6 @@ export default function APIConsumerArray() {
         abiConsumerArray,
         provider
       );
-      const F = 100000;
       // call the ID from the contract
       const _id = await consumerContract.id();
       setIdFirstElement(_id);

@@ -22,6 +22,13 @@ export default function Home() {
           </div>
           <ul>
             <li>
+              <Link href="./dataFeedConsumer">
+                <a>Price Data Feed Consumer</a>
+              </Link>
+            </li>
+          </ul>
+          <ul>
+            <li>
               <Link href="./apiConsumer">
                 <a>API Consumer</a>
               </Link>

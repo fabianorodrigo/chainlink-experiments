@@ -1,3 +1,6 @@
+export const DATAFEED_CONSUMER_CONTRACT_ADDRESS =
+  "0xE30406154450E852Fdb6b235D62f32B5bF70394f";
+
 export const CONSUMER_CONTRACT_ADDRESS =
   "0x939859B2C2915a0E28D41F6E922C950aAdF12155";
 export const CONSUMER_MULTI_WORDS_CONTRACT_ADDRESS =
@@ -13,6 +16,48 @@ export const CONSUMER_PRE_CONFIGURED_JOB_ADDRESS =
 
 export const KOVAN_DEVREL_NODE = "0x74EcC8Bdeb76F2C6760eD2dc8A46ca5e581fA656";
 export const KOVAN_LINK_TOKEN = "0xa36085F69e2889c224210F603D836748e7dC0088";
+export const KOVAN_DATA_FEED_ETH_USD_ADDRESS =
+  "0x9326BFA02ADD2366b30bacB125260Af641031331";
+
+export const abiDataFeedConsumer = [
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_aggregatorAddress",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    inputs: [],
+    name: "getLatestPrice",
+    outputs: [
+      {
+        internalType: "int256",
+        name: "",
+        type: "int256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "teste",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+];
 
 export const abiConsumer = [
   {

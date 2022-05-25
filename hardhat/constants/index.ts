@@ -1,6 +1,7 @@
 // valores obtidos em: https://docs.chain.link/docs/vrf-contracts/v1
 
 import {
+  KOVAN_DATA_FEED_ETH_USD_ADDRESS,
   KOVAN_DEVREL_NODE,
   KOVAN_LINK_TOKEN,
   KOVAN_VRF_COORDINATOR_ADDRESS,
@@ -35,4 +36,5 @@ export const RINKEBY = {
 export const KOVAN = {
   LINK_TOKEN: KOVAN_LINK_TOKEN,
   ORACLE_DEVREL_NODE: KOVAN_DEVREL_NODE,
+  DATA_FEED_ETH_USD_ADDRESS: KOVAN_DATA_FEED_ETH_USD_ADDRESS,
 };
