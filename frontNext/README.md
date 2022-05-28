@@ -5,6 +5,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 First, run the development server:
 
 ```bash
+nvm use # it will configure NVM to use the Node version specified in .nvmrc
 npm run dev
 # or
 yarn dev
