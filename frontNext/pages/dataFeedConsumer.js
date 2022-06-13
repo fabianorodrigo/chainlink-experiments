@@ -5,18 +5,14 @@ import React, {useEffect, useRef, useState} from "react";
 import Web3Modal from "web3modal";
 import {
   abiDataFeedConsumer,
-  abiLink,
   DATAFEED_CONSUMER_CONTRACT_ADDRESS,
   KOVAN_DEVREL_NODE,
-  KOVAN_LINK_TOKEN,
 } from "../constants";
 import styles from "../styles/Home.module.css";
 
 export default function DataFeedConsumer() {
   // walletConnected keep track of whether the user's wallet is connected or not
   const [walletConnected, setWalletConnected] = useState(false);
-  // loading is set to true when we are waiting for a transaction to get mined
-  const [loading, setLoading] = useState(false);
   // priceETH_USD keeps track of  ETH in USD value in the state of consumer contract
   const [priceETH_USD, setPriceETH_USD] = useState("0");
   // Create a reference to the Web3 Modal (used for connecting to Metamask) which persists as long as the page is open
@@ -121,11 +117,6 @@ export default function DataFeedConsumer() {
           Connect your wallet
         </button>
       );
-    }
-
-    // If we are currently waiting for something, return a loading button
-    if (loading) {
-      return <button className={styles.button}>Loading...</button>;
     }
 
     // Triggers the consumer contract to make a request to Oracle

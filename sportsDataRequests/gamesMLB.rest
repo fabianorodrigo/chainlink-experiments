@@ -1,0 +1,5 @@
+GET https://api.sportsdata.io/v3/mlb/scores/json/GamesByDate/2022-JUN-06
+Content-Type: application/json
+Ocp-Apim-Subscription-Key: 0e1b4c4d185140458d919830e1d53ccd
+
+

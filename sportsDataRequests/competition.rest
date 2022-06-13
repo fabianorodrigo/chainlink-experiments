@@ -1,0 +1,4 @@
+GET https://api.sportsdata.io/v3/soccer/scores/json/CompetitionHierarchy?areaId=35
+Content-Type: application/json
+Ocp-Apim-Subscription-Key: 2bf7f35e18ca4e339c8300c741095ffc
+

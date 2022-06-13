@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prettier": "prettier --write ."
   },
   "dependencies": {
     "ethers": "^5.6.4",
@@ -17,6 +18,7 @@
   },
   "devDependencies": {
     "eslint": "8.13.0",
-    "eslint-config-next": "12.1.5"
+    "eslint-config-next": "12.1.5",
+    "prettier": "^2.6.2"
   }
 }

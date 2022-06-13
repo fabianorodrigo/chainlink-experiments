@@ -66,6 +66,11 @@
   margin-bottom: 2%;
 }
 
+.button:disabled {
+  background-color: #6a80c9;
+  cursor: default;
+}
+
 @media (max-width: 1000px) {
   .main {
     width: 100%;

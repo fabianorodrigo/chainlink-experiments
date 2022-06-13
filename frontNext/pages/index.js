@@ -54,6 +54,13 @@ export default function Home() {
               </Link>
             </li>
           </ul>
+          <ul>
+            <li>
+              <Link href="./sportsDataIOConsumer">
+                <a>Sports Data IO Consumer</a>
+              </Link>
+            </li>
+          </ul>
         </div>
         <div>
           <img className={styles.image} src="./img/chainlink.png" />

@@ -17,8 +17,6 @@ export default function APIConsumer() {
   const [walletConnected, setWalletConnected] = useState(false);
   // loading is set to true when we are waiting for a transaction to get mined
   const [loading, setLoading] = useState(false);
-  // checks if the currently connected MetaMask wallet is the owner of the contract
-  const [isOwner, setIsOwner] = useState(false);
   // volume24h keeps track of the volume of Ethers in the state of consumer contract
   const [volume24h, setVolume24h] = useState("0");
   // consumerLinkBalance keeps track of the consumer contract's balance in LINK
@@ -65,35 +63,6 @@ export default function APIConsumer() {
       setWalletConnected(true);
     } catch (err) {
       console.error(err);
-    }
-  };
-
-  /**
-   * getOwner: calls the contract to retrieve the owner
-   */
-  const getOwner = async () => {
-    try {
-      // Get the provider from web3Modal, which in our case is MetaMask
-      // No need for the Signer here, as we are only reading state from the blockchain
-      const provider = await getProviderOrSigner();
-      // We connect to the Contract using a Provider, so we will only
-      // have read-only access to the Contract
-      const consumerContract = new Contract(
-        CONSUMER_CONTRACT_ADDRESS,
-        abiConsumer,
-        provider
-      );
-      // call the owner function from the contract
-      const _owner = await consumerContract.owner();
-      // We will get the signer now to extract the address of the currently connected MetaMask account
-      const signer = await getProviderOrSigner(true);
-      // Get the address associated to the signer which is connected to  MetaMask
-      const address = await signer.getAddress();
-      if (address.toLowerCase() === _owner.toLowerCase()) {
-        setIsOwner(true);
-      }
-    } catch (err) {
-      console.error(err.message);
     }
   };
 
